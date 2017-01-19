@@ -1,0 +1,6 @@
+1/18
+Forking project from survivejs codebase. First UI should be a text input
+to accept english form of hiragana. Trigger on enter or via button to side.
+Shuffles through all of list until empty. If a word is missed, it goes back
+on the list. 
+todo: new/reset game; add all hiragana from chapter
