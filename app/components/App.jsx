@@ -2,8 +2,9 @@ import uuid from 'node-uuid';
 import React from 'react';
 import Note from './Note.jsx';
 import Notes from './Notes.jsx';
+import Hiragana from '../hiragana.json';
 
-class Hiragana {
+class QuizItem {
     constructor(hiragana, english) {
         this.hiragana = hiragana;
         this.english = english;
@@ -16,10 +17,9 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        let hiragana = [
-            new Hiragana('か', 'ka'),
-            new Hiragana('お', 'o')
-        ];
+        let hiragana = Hiragana.map(h => {
+            return new QuizItem(h[0], h[1]);
+        });
 
         this.state = { hiragana: this.setRandomPresenter(hiragana) };
     }
