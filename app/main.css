@@ -3,6 +3,15 @@ body {
     font-family: sans-serif;
 }
 
+.game {
+    padding-top: 1em;
+    padding-left: 2em;
+}
+
+.quiz-item {
+    font-size: xx-large;
+}
+
 .add-note {
     background-color: #fdfdfd;
     border: 1px solid #ccc;

@@ -9,7 +9,6 @@ class QuizItem {
         this.hiragana = hiragana;
         this.english = english;
         this.isPresenting = false;
-        this.answered = false;
     }
 }
 
@@ -17,40 +16,58 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        let hiragana = Hiragana.map(h => {
+        this.state = { 
+            hiragana: this.initialGameState(),
+            previousError: null
+        };
+    }
+
+    // todo: refactor, doesn't save state when called by 'reset' button
+    initialGameState = () => {
+        let state = Hiragana.map(h => {
             return new QuizItem(h[0], h[1]);
         });
 
-        this.state = { hiragana: this.setRandomPresenter(hiragana) };
-    }
+        return this.setRandomPresenter(state);
+    };
 
     render() {
         const hiragana = this.state.hiragana;
-        const unanswered = hiragana.filter(h => !h.answered);
 
-        if (unanswered.length === 0) {
+        if (hiragana.length === 0) {
             return this.renderDone();
         }
 
-        const presenting = unanswered.filter(h => h.isPresenting);
+        const presenting = hiragana.filter(h => h.isPresenting);
         const text = presenting[0].hiragana;
+
+        let previousError;
+        if (this.state.previousError) {
+            previousError = `Wrong! ${this.state.previousError.hiragana} is ${this.state.previousError.english}.`;
+        }
         
-        return this.renderGame(text);
+        return this.renderGame(text, previousError);
     };
 
-    renderGame = (text) => {
+    renderGame = (text, previousError) => {
         return (
-            <div>
-                <div><span>{text}</span></div>
+            <div className="game">
+                <div><span className="quiz-item">{text}</span></div>
                 <input type="text"
                     autoFocus={true}
                     onKeyPress={this.checkEnter} />
+                <div><span>{previousError}</span></div>
             </div>
         );
     };
 
     renderDone = () => {
-        return <div>Done!</div>
+        return (
+            <div>
+                <span>Done!</span>
+                <button onClick={this.initialGameState}>Reset</button>
+            </div>
+        );
     };
 
     checkEnter = (e) => {
@@ -65,37 +82,37 @@ export default class App extends React.Component {
         // is there a better way to clear input?
         e.target.value = "";
 
-        const answer = this.state.hiragana
-            .filter(h => h.isPresenting)
-            .map(h => h.english)[0];
-        
+        const current = this.state.hiragana
+            .filter(h => h.isPresenting)[0];
+            
         let hiragana;
-        if (attempt === answer) {
-            hiragana = this.state.hiragana.map(h => {
+        let previousError;
+        if (attempt === current.english) {
+            hiragana = this.state.hiragana.filter(h => {
                 if (h.isPresenting) {
-                    h.answered = true;
-                    h.isPresenting = false;
+                    return false;
                 }
 
-                return h;
+                return true;
             });
+            previousError = null;
         } else {
             // set error state here
-            hiragana = this.state.hiragana;
+            hiragana = this.state.hiragana.map(h => {
+                h.isPresenting = false;
+                return h;
+            });
+            previousError = current;
         }
 
         hiragana = this.setRandomPresenter(hiragana);
-        this.setState({hiragana});
+        this.setState({hiragana, previousError});
     };
 
     setRandomPresenter = (hiragana) => {
         // random returns [0, 1)
         const index = Math.floor(Math.random() * hiragana.length);
         const selected = hiragana[index];
-
-        // todo: this doesn't filter for items
-        // already answered. If it sets one of those to be 
-        // presenter, the game will get stuck. 
 
         return hiragana.map(h => {
             if (h.hiragana === selected.hiragana) {
