@@ -46,13 +46,16 @@ export default class App extends React.Component {
             previousError = `Wrong! ${this.state.previousError.hiragana} is ${this.state.previousError.english}.`;
         }
         
-        return this.renderGame(text, previousError);
+        return this.renderGame(text, previousError, hiragana.length);
     };
 
-    renderGame = (text, previousError) => {
+    renderGame = (text, previousError, left) => {
         return (
             <div className="game">
-                <div><span className="quiz-item">{text}</span></div>
+                <div>
+                    <span className="quiz-item">{text}</span>
+                    <span className="items-left">{left} left</span>
+                </div>
                 <input type="text"
                     autoFocus={true}
                     onKeyPress={this.checkEnter} />

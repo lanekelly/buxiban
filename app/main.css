@@ -12,6 +12,11 @@ body {
     font-size: xx-large;
 }
 
+.items-left {
+    font-size: small;
+    padding: 4.5em;
+}
+
 .add-note {
     background-color: #fdfdfd;
     border: 1px solid #ccc;
