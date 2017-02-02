@@ -49,7 +49,7 @@ export default class App extends React.Component {
         const activeGroupVals = this.state.groups.filter(g => g.active).map(g => g.value);
         const hiragana = this.state.hiragana.filter(h => activeGroupVals.includes(h.group));
 
-        if (hiragana.filter(h => h.unanswered).length === 0 
+        if (hiragana.filter(h => h.unanswered).length === 0
             || activeGroupVals.length === 0) {
             return this.renderDone();
         }
@@ -61,7 +61,7 @@ export default class App extends React.Component {
         if (this.state.previousError) {
             previousError = `Wrong! ${this.state.previousError.hiragana} is ${this.state.previousError.english}.`;
         }
-        
+
         return this.renderGame(this.state.groups, text, previousError, hiragana.length);
     };
 
@@ -108,16 +108,17 @@ export default class App extends React.Component {
 
         const current = this.state.hiragana
             .filter(h => h.isPresenting)[0];
-            
+
         let hiragana;
         let previousError;
         if (attempt === current.english) {
             hiragana = this.state.hiragana.map(h => {
                 if (h.isPresenting) {
                     h.unanswered = false;
+                    h.isPresenting = false;
                 }
 
-                return true;
+                return h;
             });
             previousError = null;
         } else {
@@ -145,8 +146,9 @@ export default class App extends React.Component {
                 if (candidate.unanswered && activeGroupVals.includes(candidate.group)) {
                     selected = candidate;
                 }
+                console.log('looping!');
             }
-        }        
+        }
 
         return hiragana.map(h => {
             if (h.hiragana === selected.hiragana) {
@@ -169,10 +171,10 @@ export default class App extends React.Component {
         const activeGroups = groups.filter(g => g.active).map(g => g.value);
         let hiragana = this.state.hiragana;
         if (hiragana.filter(h => h.isPresenting && activeGroups.includes(h.group)).length === 0
-            && activeGroups.length > 0) {            
+            && activeGroups.length > 0) {
             hiragana = this.setRandomPresenter(hiragana, groups);
         }
 
         this.setState({groups, hiragana});
-    };    
+    };
 }
