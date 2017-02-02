@@ -9,6 +9,7 @@ class QuizItem {
         this.english = english;
         this.group = group;
         this.isPresenting = false;
+        this.unanswered = true;
     }
 }
 
@@ -26,17 +27,16 @@ export default class App extends React.Component {
         this.state = this.initialGameState();
     }
 
-    // todo: refactor, doesn't save state when called by 'reset' button
     initialGameState = () => {
         let hiragana = Hiragana.map(h => {
             return new QuizItem(h[0], h[1], h[2]);
         });
 
-        hiragana = this.setRandomPresenter(hiragana);
-
-        let groups = _.uniqBy(Hiragana.map(h => {
+        const groups = _.uniqBy(Hiragana.map(h => {
             return { value: h[2], active: true }
         }), 'value');
+
+        hiragana = this.setRandomPresenter(hiragana, groups);
 
         return {
             hiragana: hiragana,
@@ -46,9 +46,11 @@ export default class App extends React.Component {
     };
 
     render() {
-        const hiragana = this.state.hiragana;
+        const activeGroupVals = this.state.groups.filter(g => g.active).map(g => g.value);
+        const hiragana = this.state.hiragana.filter(h => activeGroupVals.includes(h.group));
 
-        if (hiragana.length === 0) {
+        if (hiragana.filter(h => h.unanswered).length === 0 
+            || activeGroupVals.length === 0) {
             return this.renderDone();
         }
 
@@ -110,9 +112,9 @@ export default class App extends React.Component {
         let hiragana;
         let previousError;
         if (attempt === current.english) {
-            hiragana = this.state.hiragana.filter(h => {
+            hiragana = this.state.hiragana.map(h => {
                 if (h.isPresenting) {
-                    return false;
+                    h.unanswered = false;
                 }
 
                 return true;
@@ -127,14 +129,24 @@ export default class App extends React.Component {
             previousError = current;
         }
 
-        hiragana = this.setRandomPresenter(hiragana);
+        hiragana = this.setRandomPresenter(hiragana, this.state.groups);
         this.setState({hiragana, previousError});
     };
 
-    setRandomPresenter = (hiragana) => {
-        // random returns [0, 1)
-        const index = Math.floor(Math.random() * hiragana.length);
-        const selected = hiragana[index];
+    // presenting item must be unanswered and part of an active group
+    setRandomPresenter = (hiragana, groups) => {
+        let selected = null;
+        const activeGroupVals = groups.filter(g => g.active).map(g => g.value);
+        if (activeGroupVals.length > 0) {
+            while (selected === null) {
+                // random returns [0, 1)
+                const index = Math.floor(Math.random() * hiragana.length);
+                const candidate = hiragana[index];
+                if (candidate.unanswered && activeGroupVals.includes(candidate.group)) {
+                    selected = candidate;
+                }
+            }
+        }        
 
         return hiragana.map(h => {
             if (h.hiragana === selected.hiragana) {
@@ -155,10 +167,10 @@ export default class App extends React.Component {
         });
 
         const activeGroups = groups.filter(g => g.active).map(g => g.value);
-        let hiragana = this.state.hiragana.filter(h => activeGroups.includes(h.group))
-
-        if (hiragana.filter(h => h.isPresenting).length === 0) {
-            hiragana = this.setRandomPresenter(hiragana);
+        let hiragana = this.state.hiragana;
+        if (hiragana.filter(h => h.isPresenting && activeGroups.includes(h.group)).length === 0
+            && activeGroups.length > 0) {            
+            hiragana = this.setRandomPresenter(hiragana, groups);
         }
 
         this.setState({groups, hiragana});
