@@ -3,12 +3,22 @@ import React from 'react';
 import Note from './Note.jsx';
 import Notes from './Notes.jsx';
 import Hiragana from '../hiragana.json';
+import ItemGroups from './ItemGroups.jsx';
+import _ from 'lodash';
 
 class QuizItem {
-    constructor(hiragana, english) {
+    constructor(hiragana, english, group) {
         this.hiragana = hiragana;
         this.english = english;
+        this.group = group;
         this.isPresenting = false;
+    }
+}
+
+class QuizItemGroup {
+    constructor(value) {
+        this.value = value;
+        this.active = false;
     }
 }
 
@@ -16,19 +26,26 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { 
-            hiragana: this.initialGameState(),
-            previousError: null
-        };
+        this.state = this.initialGameState();
     }
 
     // todo: refactor, doesn't save state when called by 'reset' button
     initialGameState = () => {
-        let state = Hiragana.map(h => {
-            return new QuizItem(h[0], h[1]);
+        let hiragana = Hiragana.map(h => {
+            return new QuizItem(h[0], h[1], h[2]);
         });
 
-        return this.setRandomPresenter(state);
+        hiragana = this.setRandomPresenter(hiragana);
+
+        let groups = _.uniqBy(Hiragana.map(h => {
+            return { value: h[2], active: true }
+        }), 'value');
+
+        return {
+            hiragana: hiragana,
+            previousError: null,
+            groups: groups
+        };
     };
 
     render() {
@@ -46,12 +63,13 @@ export default class App extends React.Component {
             previousError = `Wrong! ${this.state.previousError.hiragana} is ${this.state.previousError.english}.`;
         }
         
-        return this.renderGame(text, previousError, hiragana.length);
+        return this.renderGame(this.state.groups, text, previousError, hiragana.length);
     };
 
-    renderGame = (text, previousError, left) => {
+    renderGame = (groups, text, previousError, left) => {
         return (
             <div className="game">
+                <ItemGroups groups={groups} onChange={this.onItemGroupChange} />
                 <div>
                     <span className="quiz-item">{text}</span>
                     <span className="items-left">{left} left</span>
@@ -124,6 +142,25 @@ export default class App extends React.Component {
 
             return h;
         });
+    };
+
+    onItemGroupChange = (group, checked) => {
+        const groups = this.state.groups.map(g => {
+            if (g.value === group) {
+                g.active = checked;
+            }
+
+            return g;
+        });
+
+        const activeGroups = groups.filter(g => g.active).map(g => g.value);
+        let hiragana = this.state.hiragana.filter(h => activeGroups.includes(h.group))
+
+        if (hiragana.filter(h => h.isPresenting).length === 0) {
+            hiragana = this.setRandomPresenter(hiragana);
+        }
+
+        this.setState({groups, hiragana});
     };
 
     addNote = () => {

@@ -8,6 +8,10 @@ todo: new/reset game; add all hiragana from chapter
 1/26
 Desired improvements:
 - ask english text, write down hiragana on paper
-- choose subsets ('k', 'n', etc)
-- add next set 
++ choose subsets ('k', 'n', etc)
++ add next set 
 - choose a # of items for quiz to limit size
+
+2/1
+Desired improvements:
+- Make input lowercase and check against that 
