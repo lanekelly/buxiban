@@ -22026,21 +22026,26 @@
 
 	        _this.setRandomPresenter = function (hiragana, groups) {
 	            var selected = null;
+	            var iterationCount = 0;
 	            var activeGroupVals = groups.filter(function (g) {
 	                return g.active;
 	            }).map(function (g) {
 	                return g.value;
 	            });
-	            if (activeGroupVals.length > 0) {
-	                while (selected === null) {
-	                    // random returns [0, 1)
-	                    var index = Math.floor(Math.random() * hiragana.length);
-	                    var candidate = hiragana[index];
-	                    if (candidate.unanswered && activeGroupVals.indexOf(candidate.group) !== -1) {
-	                        selected = candidate;
-	                    }
-	                    console.log('looping!');
+
+	            while (selected === null && iterationCount < hiragana.length) {
+	                // random returns [0, 1)
+	                var index = Math.floor(Math.random() * hiragana.length);
+	                var candidate = hiragana[index];
+	                if (candidate.unanswered && activeGroupVals.indexOf(candidate.group) !== -1) {
+	                    selected = candidate;
 	                }
+
+	                iterationCount++;
+	            }
+
+	            if (selected === null) {
+	                return hiragana; // likely done at this point
 	            }
 
 	            return hiragana.map(function (h) {
@@ -22108,10 +22113,13 @@
 	                previousError = 'Wrong! ' + this.state.previousError.hiragana + ' is ' + this.state.previousError.english + '.';
 	            }
 
-	            return this.renderGame(this.state.groups, text, previousError, hiragana.length);
+	            return this.renderGame(this.state.groups, text, previousError, hiragana.filter(function (h) {
+	                return h.unanswered;
+	            }).length);
 	        }
 
 	        // presenting item must be unanswered and part of an active group
+	        // todo - this method is the source of way too many bugs. Need to refactor.
 
 	    }]);
 

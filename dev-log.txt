@@ -2,16 +2,17 @@
 Forking project from survivejs codebase. First UI should be a text input
 to accept english form of hiragana. Trigger on enter or via button to side.
 Shuffles through all of list until empty. If a word is missed, it goes back
-on the list. 
+on the list.
 todo: new/reset game; add all hiragana from chapter
 
 1/26
 Desired improvements:
 - ask english text, write down hiragana on paper
 + choose subsets ('k', 'n', etc)
-+ add next set 
++ add next set
 - choose a # of items for quiz to limit size
 
 2/1
 Desired improvements:
-- Make input lowercase and check against that 
+- Make input lowercase and check against that
+- Instead of defaulting to all groups enabled, pick one random at start.

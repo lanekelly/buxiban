@@ -62,7 +62,7 @@ export default class App extends React.Component {
             previousError = `Wrong! ${this.state.previousError.hiragana} is ${this.state.previousError.english}.`;
         }
 
-        return this.renderGame(this.state.groups, text, previousError, hiragana.length);
+        return this.renderGame(this.state.groups, text, previousError, hiragana.filter(h => h.unanswered).length);
     };
 
     renderGame = (groups, text, previousError, left) => {
@@ -135,19 +135,25 @@ export default class App extends React.Component {
     };
 
     // presenting item must be unanswered and part of an active group
+    // todo - this method is the source of way too many bugs. Need to refactor.
     setRandomPresenter = (hiragana, groups) => {
         let selected = null;
+        let iterationCount = 0;
         const activeGroupVals = groups.filter(g => g.active).map(g => g.value);
-        if (activeGroupVals.length > 0) {
-            while (selected === null) {
-                // random returns [0, 1)
-                const index = Math.floor(Math.random() * hiragana.length);
-                const candidate = hiragana[index];
-                if (candidate.unanswered && activeGroupVals.includes(candidate.group)) {
-                    selected = candidate;
-                }
-                console.log('looping!');
+
+        while (selected === null && iterationCount < hiragana.length) {
+            // random returns [0, 1)
+            const index = Math.floor(Math.random() * hiragana.length);
+            const candidate = hiragana[index];
+            if (candidate.unanswered && activeGroupVals.includes(candidate.group)) {
+                selected = candidate;
             }
+
+            iterationCount++;
+        }
+
+        if (selected === null) {
+            return hiragana; // likely done at this point
         }
 
         return hiragana.map(h => {
