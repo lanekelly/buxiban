@@ -100,7 +100,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\n    background: cornsilk;\n    font-family: sans-serif;\n}\n\n.game {\n    padding-top: 1em;\n    padding-left: 2em;\n}\n\n.quiz-item {\n    font-size: xx-large;\n}\n\n.items-left {\n    font-size: small;\n    padding: 4.5em;\n}", ""]);
+	exports.push([module.id, "body {\r\n    background: cornsilk;\r\n    font-family: sans-serif;\r\n}\r\n\r\n.game {\r\n    padding-top: 1em;\r\n    padding-left: 2em;\r\n}\r\n\r\n.quiz-item {\r\n    font-size: xx-large;\r\n}\r\n\r\n.items-left {\r\n    font-size: small;\r\n    padding: 4.5em;\r\n}", ""]);
 
 	// exports
 
@@ -22005,9 +22005,10 @@
 	                hiragana = _this.state.hiragana.map(function (h) {
 	                    if (h.isPresenting) {
 	                        h.unanswered = false;
+	                        h.isPresenting = false;
 	                    }
 
-	                    return true;
+	                    return h;
 	                });
 	                previousError = null;
 	            } else {
@@ -22038,6 +22039,7 @@
 	                    if (candidate.unanswered && activeGroupVals.indexOf(candidate.group) !== -1) {
 	                        selected = candidate;
 	                    }
+	                    console.log('looping!');
 	                }
 	            }
 
