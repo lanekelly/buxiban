@@ -83,9 +83,13 @@ export default class App extends React.Component {
         return (
             <div>
                 <span>Done!</span>
-                <button onClick={this.initialGameState}>Reset</button>
+                <button onClick={this.resetGame}>Reset</button>
             </div>
         );
+    };
+
+    resetGame = () => {
+        this.setState(this.initialGameState());
     };
 
     checkEnter = (e) => {
