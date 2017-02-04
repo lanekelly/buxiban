@@ -1,0 +1,208 @@
+import React from 'react';
+import Hiragana from '../hiragana.json';
+import ItemGroups from './ItemGroups.jsx';
+import _ from 'lodash';
+
+class QuizItem {
+    constructor(other, english, group) {
+        this.other = other;
+        this.english = english;
+        this.group = group;
+        this.isPresenting = false;
+        this.unanswered = true;
+    }
+}
+
+class QuizItemGroup {
+    constructor(value) {
+        this.value = value;
+        this.active = false;
+    }
+}
+
+export default class AlphabetQuiz extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = this.initialGameState();
+    }
+
+    getCharacterSet = (charSet) => {
+        if (charSet === 'hiragana') {
+            return Hiragana;
+        }
+
+        throw 'Unsupported character set!';
+    };
+
+    initialGameState = () => {
+        const charSetResource = this.getCharacterSet(this.props.characterset);
+
+        let items = charSetResource.map(h => {
+            return new QuizItem(h[0], h[1], h[2]);
+        });
+
+        const groups = _.uniqBy(charSetResource.map(h => {
+            return { value: h[2], active: true }
+        }), 'value');
+
+        items = this.setRandomPresenter(items, groups);
+
+        return {
+            items: items,
+            previousError: null,
+            groups: groups
+        };
+    };
+
+    render() {
+        const activeGroupVals = this.state.groups.filter(g => g.active).map(g => g.value);
+        const items = this.state.items.filter(h => activeGroupVals.includes(h.group));
+
+        if (items.filter(h => h.unanswered).length === 0
+            || activeGroupVals.length === 0) {
+            return this.renderDone();
+        }
+
+        const presenting = items.filter(h => h.isPresenting);
+        const text = presenting[0].other;
+
+        let previousError;
+        if (this.state.previousError) {
+            previousError = `Wrong! ${this.state.previousError.other} is ${this.state.previousError.english}.`;
+        }
+
+        return this.renderGame(this.state.groups, text, previousError, items.filter(h => h.unanswered).length);
+    };
+
+    renderGame = (groups, text, previousError, left) => {
+        return (
+            <div className="game">
+                <ItemGroups groups={groups} onChange={this.onItemGroupChange} />
+                <div>
+                    <span className="quiz-item">{text}</span>
+                    <span className="items-left">{left} left</span>
+                </div>
+                <input type="text"
+                    autoFocus={true}
+                    onKeyPress={this.checkEnter} />
+                <div><span>{previousError}</span></div>
+            </div>
+        );
+    };
+
+    renderDone = () => {
+        return (
+            <div>
+                <span>Done!</span>
+                <button onClick={this.resetGame}>Reset</button>
+            </div>
+        );
+    };
+
+    onGameChanged = (event) => {
+        this.setState({
+            activegame: event.target.value
+        });
+    };
+
+    resetGame = () => {
+        this.setState(this.initialGameState());
+    };
+
+    checkEnter = (e) => {
+        if (e.key === 'Enter') {
+            this.evaluateAnswer(e);
+        }
+    };
+
+    evaluateAnswer = (e) => {
+        const attempt = e.target.value;
+
+        // is there a better way to clear input?
+        e.target.value = "";
+
+        const current = this.state.items
+            .filter(h => h.isPresenting)[0];
+
+        let items;
+        let previousError;
+        if (attempt === current.english) {
+            items = this.state.items.map(h => {
+                if (h.isPresenting) {
+                    h.unanswered = false;
+                    h.isPresenting = false;
+                }
+
+                return h;
+            });
+            previousError = null;
+        } else {
+            // set error state here
+            items = this.state.items.map(h => {
+                h.isPresenting = false;
+                return h;
+            });
+            previousError = current;
+        }
+
+        items = this.setRandomPresenter(items, this.state.groups);
+        this.setState({items, previousError});
+    };
+
+    // presenting item must be unanswered and part of an active group
+    // todo - this method is the source of way too many bugs. Need to refactor.
+    setRandomPresenter = (items, groups) => {
+        let selected = null;
+        let iterationCount = 0;
+        const activeGroupVals = groups.filter(g => g.active).map(g => g.value);
+
+        while (selected === null && iterationCount < items.length) {
+            // random returns [0, 1)
+            const index = Math.floor(Math.random() * items.length);
+            const candidate = items[index];
+            if (candidate.unanswered && activeGroupVals.includes(candidate.group)) {
+                selected = candidate;
+            }
+
+            iterationCount++;
+        }
+
+        if (selected === null) {
+            return items; // likely done at this point
+        }
+
+        return items.map(h => {
+            if (h.other === selected.other) {
+                h.isPresenting = true;
+            }
+
+            return h;
+        });
+    };
+
+    onItemGroupChange = (group, checked) => {
+        const groups = this.state.groups.map(g => {
+            if (g.value === group) {
+                g.active = checked;
+            }
+
+            return g;
+        });
+
+        const activeGroups = groups.filter(g => g.active).map(g => g.value);
+        let items = this.state.items;
+        if (items.filter(h => h.isPresenting && activeGroups.includes(h.group)).length === 0
+            && activeGroups.length > 0) {
+
+            items = items.map(h => {
+                h.isPresenting = false;
+                return h;
+            });
+
+            items = this.setRandomPresenter(items, groups);
+        }
+
+        this.setState({groups, items});
+    };
+}
