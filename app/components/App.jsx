@@ -13,14 +13,16 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div><div>
-                {this.state.games.map(game =>
-                    <div key={game}>
-                        <input type="radio" value={game} checked={this.state.activeGame === game} onChange={this.onGameChanged} />
-                        <label htmlFor={game}>{game}</label>
-                    </div>)}
+            <div className="app">
+                <div>
+                    {this.state.games.map(game =>
+                        <div key={game}>
+                            <input type="radio" value={game} checked={this.state.activeGame === game} onChange={this.onGameChanged} />
+                            <label htmlFor={game}>{game}</label>
+                        </div>)}
+                </div>
+                {this.renderActiveGame()}
             </div>
-            {this.renderActiveGame()}</div>
         );
     }
 

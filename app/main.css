@@ -3,16 +3,35 @@ body {
     font-family: sans-serif;
 }
 
-.game {
+.app {
     padding-top: 1em;
     padding-left: 2em;
 }
 
+.alphabet-quiz-container {
+    padding-top: 1em;
+}
+
 .quiz-item {
-    font-size: xx-large;
+    font-size: 7em;
+    padding-left: 0.2em;
+}
+
+.item-display-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .items-left {
     font-size: small;
-    padding: 4.5em;
+    padding-left: 1em;
+}
+
+.input-container {
+    padding-top: 1em;
+}
+
+.wrong-answer-text {
+    padding-top: 0.5em;
 }

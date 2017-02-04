@@ -77,16 +77,18 @@ export default class AlphabetQuiz extends React.Component {
 
     renderGame = (groups, text, previousError, left) => {
         return (
-            <div className="game">
-                <ItemGroups groups={groups} onChange={this.onItemGroupChange} />
-                <div>
+            <div className="alphabet-quiz-container">
+                <div className="item-display-container">
+                    <ItemGroups groups={groups} onChange={this.onItemGroupChange} />
                     <span className="quiz-item">{text}</span>
-                    <span className="items-left">{left} left</span>
                 </div>
-                <input type="text"
-                    autoFocus={true}
-                    onKeyPress={this.checkEnter} />
-                <div><span>{previousError}</span></div>
+                <div className="input-container">
+                    <input type="text"
+                        autoFocus={true}
+                        onKeyPress={this.checkEnter} />
+                    <span className="items-left">{left} left</span>
+                    <div className="wrong-answer-text"><span>{previousError}</span></div>
+                </div>
             </div>
         );
     };
@@ -157,6 +159,8 @@ export default class AlphabetQuiz extends React.Component {
         let iterationCount = 0;
         const activeGroupVals = groups.filter(g => g.active).map(g => g.value);
 
+        // bug here. When pool is small (ex. only 'w' group is selected) the
+        // loop can finish w/o selecting an item
         while (selected === null && iterationCount < items.length) {
             // random returns [0, 1)
             const index = Math.floor(Math.random() * items.length);
