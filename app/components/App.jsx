@@ -178,6 +178,12 @@ export default class App extends React.Component {
         let hiragana = this.state.hiragana;
         if (hiragana.filter(h => h.isPresenting && activeGroups.includes(h.group)).length === 0
             && activeGroups.length > 0) {
+
+            hiragana = hiragana.map(h => {
+                h.isPresenting = false;
+                return h;
+            });
+
             hiragana = this.setRandomPresenter(hiragana, groups);
         }
 
