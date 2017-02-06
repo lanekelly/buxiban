@@ -62,7 +62,7 @@ export default class AlphabetQuiz extends React.Component {
 
     renderGame = (groups, text, previousError, left) => {
         return (
-            <div className="alphabet-quiz-container">
+            <div>
                 <div className="item-display-container">
                     <ItemGroups groups={groups} onChange={this.onItemGroupChange} />
                     <span className="quiz-item">{text}</span>

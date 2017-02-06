@@ -1,12 +1,13 @@
 import React from 'react';
 import AlphabetQuiz from './AlphabetQuiz';
+import VocabQuiz from './VocabQuiz';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            games: ['hiragana'],
+            games: ['hiragana', 'vocab'],
             activeGame: 'hiragana'
         };
     }
@@ -21,7 +22,9 @@ export default class App extends React.Component {
                             <label htmlFor={game}>{game}</label>
                         </div>)}
                 </div>
-                {this.renderActiveGame()}
+                <div className="game">
+                    {this.renderActiveGame()}
+                </div>
             </div>
         );
     }
@@ -30,6 +33,8 @@ export default class App extends React.Component {
         switch (this.state.activeGame) {
             case 'hiragana':
                 return <AlphabetQuiz characterset="hiragana"/>
+            case 'vocab':
+                return <VocabQuiz />
         }
     };
 
