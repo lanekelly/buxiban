@@ -2,23 +2,8 @@ import React from 'react';
 import Hiragana from '../hiragana.json';
 import ItemGroups from './ItemGroups.jsx';
 import _ from 'lodash';
-
-class QuizItem {
-    constructor(other, english, group) {
-        this.other = other;
-        this.english = english;
-        this.group = group;
-        this.isPresenting = false;
-        this.unanswered = true;
-    }
-}
-
-class QuizItemGroup {
-    constructor(value) {
-        this.value = value;
-        this.active = false;
-    }
-}
+import QuizItem from '../models/QuizItem.js';
+import QuizItemGroup from '../models/QuizItemGroup.js'
 
 export default class AlphabetQuiz extends React.Component {
     constructor(props) {
