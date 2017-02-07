@@ -100,7 +100,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\r\n    background: cornsilk;\r\n    font-family: sans-serif;\r\n}\r\n\r\n.game {\r\n    padding-top: 1em;\r\n    padding-left: 2em;\r\n}\r\n\r\n.quiz-item {\r\n    font-size: xx-large;\r\n}\r\n\r\n.items-left {\r\n    font-size: small;\r\n    padding: 4.5em;\r\n}", ""]);
+	exports.push([module.id, "body {\r\n    background: cornsilk;\r\n    font-family: sans-serif;\r\n}\r\n\r\n.app {\r\n    padding-top: 1em;\r\n    padding-left: 2em;\r\n}\r\n\r\n.game {\r\n    padding-top: 1em;\r\n}\r\n\r\n.quiz-item {\r\n    font-size: 7em;\r\n    padding-left: 0.2em;\r\n}\r\n\r\n.vocab-quiz-item {\r\n    font-size: 3em;\r\n    padding-left: 1em;\r\n}\r\n\r\n.item-display-container {\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\r\n}\r\n\r\n.items-left {\r\n    font-size: small;\r\n    padding-left: 1em;\r\n}\r\n\r\n.input-container {\r\n    padding-top: 1em;\r\n}\r\n\r\n.wrong-answer-text {\r\n    padding-top: 0.5em;\r\n}", ""]);
 
 	// exports
 
@@ -21864,42 +21864,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _hiragana = __webpack_require__(183);
+	var _AlphabetQuiz = __webpack_require__(183);
 
-	var _hiragana2 = _interopRequireDefault(_hiragana);
+	var _AlphabetQuiz2 = _interopRequireDefault(_AlphabetQuiz);
 
-	var _ItemGroups = __webpack_require__(184);
+	var _VocabQuiz = __webpack_require__(192);
 
-	var _ItemGroups2 = _interopRequireDefault(_ItemGroups);
-
-	var _lodash = __webpack_require__(186);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
+	var _VocabQuiz2 = _interopRequireDefault(_VocabQuiz);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var QuizItem = function QuizItem(hiragana, english, group) {
-	    _classCallCheck(this, QuizItem);
-
-	    this.hiragana = hiragana;
-	    this.english = english;
-	    this.group = group;
-	    this.isPresenting = false;
-	    this.unanswered = true;
-	};
-
-	var QuizItemGroup = function QuizItemGroup(value) {
-	    _classCallCheck(this, QuizItemGroup);
-
-	    this.value = value;
-	    this.active = false;
-	};
 
 	var App = function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -21909,19 +21888,151 @@
 
 	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-	        _this.initialGameState = function () {
-	            var hiragana = _hiragana2.default.map(function (h) {
-	                return new QuizItem(h[0], h[1], h[2]);
+	        _this.renderActiveGame = function () {
+	            switch (_this.state.activeGame) {
+	                case 'hiragana':
+	                    return _react2.default.createElement(_AlphabetQuiz2.default, { characterset: 'hiragana' });
+	                case 'katakana':
+	                    return _react2.default.createElement(_AlphabetQuiz2.default, { characterset: 'katakana' });
+	                case 'vocab':
+	                    return _react2.default.createElement(_VocabQuiz2.default, null);
+	            }
+	        };
+
+	        _this.onGameChanged = function (event) {
+	            _this.setState({
+	                activeGame: event.target.value
+	            });
+	        };
+
+	        _this.state = {
+	            games: ['hiragana', 'katakana', 'vocab'],
+	            activeGame: 'hiragana'
+	        };
+	        return _this;
+	    }
+
+	    _createClass(App, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'app' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.state.games.map(function (game) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { key: game },
+	                            _react2.default.createElement('input', { type: 'radio', value: game, checked: _this2.state.activeGame === game, onChange: _this2.onGameChanged }),
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: game },
+	                                game
+	                            )
+	                        );
+	                    })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'game' },
+	                    this.renderActiveGame()
+	                )
+	            );
+	        }
+	    }]);
+
+	    return App;
+	}(_react2.default.Component);
+
+	exports.default = App;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(5);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _hiragana = __webpack_require__(184);
+
+	var _hiragana2 = _interopRequireDefault(_hiragana);
+
+	var _katakana = __webpack_require__(185);
+
+	var _katakana2 = _interopRequireDefault(_katakana);
+
+	var _ItemGroups = __webpack_require__(186);
+
+	var _ItemGroups2 = _interopRequireDefault(_ItemGroups);
+
+	var _lodash = __webpack_require__(188);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _QuizItem = __webpack_require__(190);
+
+	var _QuizItem2 = _interopRequireDefault(_QuizItem);
+
+	var _QuizItemGroup = __webpack_require__(191);
+
+	var _QuizItemGroup2 = _interopRequireDefault(_QuizItemGroup);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AlphabetQuiz = function (_React$Component) {
+	    _inherits(AlphabetQuiz, _React$Component);
+
+	    function AlphabetQuiz(props) {
+	        _classCallCheck(this, AlphabetQuiz);
+
+	        var _this = _possibleConstructorReturn(this, (AlphabetQuiz.__proto__ || Object.getPrototypeOf(AlphabetQuiz)).call(this, props));
+
+	        _this.getCharacterSet = function (charSet) {
+	            switch (charSet) {
+	                case 'hiragana':
+	                    return _hiragana2.default;
+	                case 'katakana':
+	                    return _katakana2.default;
+	            }
+
+	            throw 'Unsupported character set!';
+	        };
+
+	        _this.initialGameState = function (characterSet) {
+	            var charSetResource = _this.getCharacterSet(characterSet || _this.props.characterset);
+
+	            var items = charSetResource.map(function (h) {
+	                return new _QuizItem2.default(h[0], h[1], h[2]);
 	            });
 
-	            var groups = _lodash2.default.uniqBy(_hiragana2.default.map(function (h) {
+	            var groups = _lodash2.default.uniqBy(charSetResource.map(function (h) {
 	                return { value: h[2], active: true };
 	            }), 'value');
 
-	            hiragana = _this.setRandomPresenter(hiragana, groups);
+	            items = _this.setRandomPresenter(items, groups);
 
 	            return {
-	                hiragana: hiragana,
+	                items: items,
 	                previousError: null,
 	                groups: groups
 	            };
@@ -21930,33 +22041,37 @@
 	        _this.renderGame = function (groups, text, previousError, left) {
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'game' },
-	                _react2.default.createElement(_ItemGroups2.default, { groups: groups, onChange: _this.onItemGroupChange }),
+	                null,
 	                _react2.default.createElement(
 	                    'div',
-	                    null,
+	                    { className: 'item-display-container' },
+	                    _react2.default.createElement(_ItemGroups2.default, { groups: groups, onChange: _this.onItemGroupChange }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'quiz-item' },
 	                        text
-	                    ),
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'input-container' },
+	                    _react2.default.createElement('input', { type: 'text',
+	                        autoFocus: true,
+	                        onKeyPress: _this.checkEnter }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'items-left' },
 	                        left,
 	                        ' left'
-	                    )
-	                ),
-	                _react2.default.createElement('input', { type: 'text',
-	                    autoFocus: true,
-	                    onKeyPress: _this.checkEnter }),
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
+	                    ),
 	                    _react2.default.createElement(
-	                        'span',
-	                        null,
-	                        previousError
+	                        'div',
+	                        { className: 'wrong-answer-text' },
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            previousError
+	                        )
 	                    )
 	                )
 	            );
@@ -21995,14 +22110,14 @@
 	            // is there a better way to clear input?
 	            e.target.value = "";
 
-	            var current = _this.state.hiragana.filter(function (h) {
+	            var current = _this.state.items.filter(function (h) {
 	                return h.isPresenting;
 	            })[0];
 
-	            var hiragana = void 0;
+	            var items = void 0;
 	            var previousError = void 0;
 	            if (attempt === current.english) {
-	                hiragana = _this.state.hiragana.map(function (h) {
+	                items = _this.state.items.map(function (h) {
 	                    if (h.isPresenting) {
 	                        h.unanswered = false;
 	                        h.isPresenting = false;
@@ -22013,18 +22128,18 @@
 	                previousError = null;
 	            } else {
 	                // set error state here
-	                hiragana = _this.state.hiragana.map(function (h) {
+	                items = _this.state.items.map(function (h) {
 	                    h.isPresenting = false;
 	                    return h;
 	                });
 	                previousError = current;
 	            }
 
-	            hiragana = _this.setRandomPresenter(hiragana, _this.state.groups);
-	            _this.setState({ hiragana: hiragana, previousError: previousError });
+	            items = _this.setRandomPresenter(items, _this.state.groups);
+	            _this.setState({ items: items, previousError: previousError });
 	        };
 
-	        _this.setRandomPresenter = function (hiragana, groups) {
+	        _this.setRandomPresenter = function (items, groups) {
 	            var selected = null;
 	            var iterationCount = 0;
 	            var activeGroupVals = groups.filter(function (g) {
@@ -22033,10 +22148,12 @@
 	                return g.value;
 	            });
 
-	            while (selected === null && iterationCount < hiragana.length) {
+	            // bug here. When pool is small (ex. only 'w' group is selected) the
+	            // loop can finish w/o selecting an item
+	            while (selected === null && iterationCount < items.length) {
 	                // random returns [0, 1)
-	                var index = Math.floor(Math.random() * hiragana.length);
-	                var candidate = hiragana[index];
+	                var index = Math.floor(Math.random() * items.length);
+	                var candidate = items[index];
 	                if (candidate.unanswered && activeGroupVals.indexOf(candidate.group) !== -1) {
 	                    selected = candidate;
 	                }
@@ -22045,11 +22162,11 @@
 	            }
 
 	            if (selected === null) {
-	                return hiragana; // likely done at this point
+	                return items; // likely done at this point
 	            }
 
-	            return hiragana.map(function (h) {
-	                if (h.hiragana === selected.hiragana) {
+	            return items.map(function (h) {
+	                if (h.other === selected.other) {
 	                    h.isPresenting = true;
 	                }
 
@@ -22071,21 +22188,34 @@
 	            }).map(function (g) {
 	                return g.value;
 	            });
-	            var hiragana = _this.state.hiragana;
-	            if (hiragana.filter(function (h) {
+	            var items = _this.state.items;
+	            if (items.filter(function (h) {
 	                return h.isPresenting && activeGroups.indexOf(h.group) !== -1;
 	            }).length === 0 && activeGroups.length > 0) {
-	                hiragana = _this.setRandomPresenter(hiragana, groups);
+
+	                items = items.map(function (h) {
+	                    h.isPresenting = false;
+	                    return h;
+	                });
+
+	                items = _this.setRandomPresenter(items, groups);
 	            }
 
-	            _this.setState({ groups: groups, hiragana: hiragana });
+	            _this.setState({ groups: groups, items: items });
 	        };
 
 	        _this.state = _this.initialGameState();
 	        return _this;
 	    }
 
-	    _createClass(App, [{
+	    _createClass(AlphabetQuiz, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (nextProps.characterset !== this.props.characterset) {
+	                this.setState(this.initialGameState(nextProps.characterset));
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var activeGroupVals = this.state.groups.filter(function (g) {
@@ -22093,27 +22223,27 @@
 	            }).map(function (g) {
 	                return g.value;
 	            });
-	            var hiragana = this.state.hiragana.filter(function (h) {
+	            var items = this.state.items.filter(function (h) {
 	                return activeGroupVals.indexOf(h.group) !== -1;
 	            });
 
-	            if (hiragana.filter(function (h) {
+	            if (items.filter(function (h) {
 	                return h.unanswered;
 	            }).length === 0 || activeGroupVals.length === 0) {
 	                return this.renderDone();
 	            }
 
-	            var presenting = hiragana.filter(function (h) {
+	            var presenting = items.filter(function (h) {
 	                return h.isPresenting;
 	            });
-	            var text = presenting[0].hiragana;
+	            var text = presenting[0].other;
 
 	            var previousError = void 0;
 	            if (this.state.previousError) {
-	                previousError = 'Wrong! ' + this.state.previousError.hiragana + ' is ' + this.state.previousError.english + '.';
+	                previousError = 'Wrong! ' + this.state.previousError.other + ' is ' + this.state.previousError.english + '.';
 	            }
 
-	            return this.renderGame(this.state.groups, text, previousError, hiragana.filter(function (h) {
+	            return this.renderGame(this.state.groups, text, previousError, items.filter(function (h) {
 	                return h.unanswered;
 	            }).length);
 	        }
@@ -22123,13 +22253,13 @@
 
 	    }]);
 
-	    return App;
+	    return AlphabetQuiz;
 	}(_react2.default.Component);
 
-	exports.default = App;
+	exports.default = AlphabetQuiz;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -22491,7 +22621,89 @@
 	];
 
 /***/ },
-/* 184 */
+/* 185 */
+/***/ function(module, exports) {
+
+	module.exports = [
+		[
+			"ア",
+			"a",
+			"vowel"
+		],
+		[
+			"イ",
+			"i",
+			"vowel"
+		],
+		[
+			"ウ",
+			"u",
+			"vowel"
+		],
+		[
+			"エ",
+			"e",
+			"vowel"
+		],
+		[
+			"オ",
+			"o",
+			"vowel"
+		],
+		[
+			"カ",
+			"ka",
+			"kg"
+		],
+		[
+			"キ",
+			"ki",
+			"kg"
+		],
+		[
+			"ク",
+			"ku",
+			"kg"
+		],
+		[
+			"ケ",
+			"ke",
+			"kg"
+		],
+		[
+			"コ",
+			"ko",
+			"kg"
+		],
+		[
+			"ガ",
+			"ga",
+			"kg"
+		],
+		[
+			"ギ",
+			"gi",
+			"kg"
+		],
+		[
+			"グ",
+			"gu",
+			"kg"
+		],
+		[
+			"ゲ",
+			"ge",
+			"kg"
+		],
+		[
+			"ゴ",
+			"go",
+			"kg"
+		]
+	];
+
+/***/ },
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22504,7 +22716,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ItemGroup = __webpack_require__(185);
+	var _ItemGroup = __webpack_require__(187);
 
 	var _ItemGroup2 = _interopRequireDefault(_ItemGroup);
 
@@ -22524,7 +22736,7 @@
 	};
 
 /***/ },
-/* 185 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22588,7 +22800,7 @@
 	exports.default = ItemGroup;
 
 /***/ },
-/* 186 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -39676,10 +39888,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(187)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(189)(module)))
 
 /***/ },
-/* 187 */
+/* 189 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -39693,6 +39905,459 @@
 		return module;
 	}
 
+
+/***/ },
+/* 190 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var QuizItem = function QuizItem(other, english, group) {
+	    _classCallCheck(this, QuizItem);
+
+	    this.other = other;
+	    this.english = english;
+	    this.group = group;
+	    this.isPresenting = false;
+	    this.unanswered = true;
+	};
+
+	exports.default = QuizItem;
+
+/***/ },
+/* 191 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var QuizItemGroup = function QuizItemGroup(value) {
+	    _classCallCheck(this, QuizItemGroup);
+
+	    this.value = value;
+	    this.active = true;
+	};
+
+	exports.default = QuizItemGroup;
+
+/***/ },
+/* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(5);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _QuizItem = __webpack_require__(190);
+
+	var _QuizItem2 = _interopRequireDefault(_QuizItem);
+
+	var _QuizItemGroup = __webpack_require__(191);
+
+	var _QuizItemGroup2 = _interopRequireDefault(_QuizItemGroup);
+
+	var _vocabulary = __webpack_require__(193);
+
+	var _vocabulary2 = _interopRequireDefault(_vocabulary);
+
+	var _lodash = __webpack_require__(188);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _ItemGroups = __webpack_require__(186);
+
+	var _ItemGroups2 = _interopRequireDefault(_ItemGroups);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var VocabQuiz = function (_React$Component) {
+	    _inherits(VocabQuiz, _React$Component);
+
+	    function VocabQuiz(props) {
+	        _classCallCheck(this, VocabQuiz);
+
+	        var _this = _possibleConstructorReturn(this, (VocabQuiz.__proto__ || Object.getPrototypeOf(VocabQuiz)).call(this, props));
+
+	        _this.initialGameState = function (whichToTest) {
+	            var whichToTestVal = whichToTest || 'first';
+
+	            var items = _this.getQuizItems(whichToTestVal);
+	            var groups = _lodash2.default.uniqBy(_vocabulary2.default.map(function (w) {
+	                return new _QuizItemGroup2.default(w[2]);
+	            }), 'value');
+
+	            items = _this.setRandomPresenter(items, groups);
+
+	            return {
+	                items: items,
+	                previousError: null,
+	                groups: groups,
+	                whichToTest: whichToTestVal
+	            };
+	        };
+
+	        _this.getQuizItems = function (whichToTest) {
+	            if (whichToTest !== 'first' && whichToTest !== 'second') {
+	                throw 'Invalid paramter. Must be \'first\' or \'second\'';
+	            }
+
+	            var testItemIndex = whichToTest === 'first' ? 0 : 1;
+	            var answerIndex = whichToTest === 'first' ? 1 : 0;
+
+	            return _vocabulary2.default.map(function (w) {
+	                return new _QuizItem2.default(w[testItemIndex], w[answerIndex], w[2]);
+	            });
+	        };
+
+	        _this.renderDone = function () {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Done!'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: _this.resetGame },
+	                    'Reset'
+	                )
+	            );
+	        };
+
+	        _this.onModeChanged = function (event) {
+	            var whichToTest = event.target.value;
+
+	            _this.setState(_this.initialGameState(whichToTest));
+	        };
+
+	        _this.resetGame = function () {
+	            _this.setState(_this.initialGameState());
+	        };
+
+	        _this.checkEnter = function (event) {
+	            if (event.key === 'Enter') {
+	                _this.evaluateAnswer(event);
+	            }
+	        };
+
+	        _this.evaluateAnswer = function (event) {
+	            var attempt = event.target.value;
+	            event.target.value = '';
+
+	            var current = _lodash2.default.chain(_this.state.items).filter(function (i) {
+	                return i.isPresenting;
+	            }).head().value();
+
+	            var correct = attempt === current.english;
+	            var modItems = _this.state.items.map(function (i) {
+	                if (i.isPresenting) {
+	                    i.unanswered = !correct;
+	                    i.isPresenting = false;
+	                }
+
+	                return i;
+	            });
+
+	            modItems = _this.setRandomPresenter(modItems, _this.state.groups);
+	            var previousError = correct ? null : current;
+
+	            _this.setState({ modItems: modItems, previousError: previousError });
+	        };
+
+	        _this.setRandomPresenter = function (items, groups) {
+	            var activeGroupVals = groups.filter(function (g) {
+	                return g.active;
+	            }).map(function (g) {
+	                return g.value;
+	            });
+	            var selectionPool = items.filter(function (i) {
+	                return i.unanswered;
+	            }).filter(function (i) {
+	                return activeGroupVals.indexOf(i.group) !== -1;
+	            });
+
+	            var selectedIndex = Math.floor(Math.random() * selectionPool.length);
+	            var selected = selectionPool[selectedIndex];
+
+	            return items.map(function (i) {
+	                if (i.other === selected.other) {
+	                    i.isPresenting = true;
+	                }
+
+	                return i;
+	            });
+	        };
+
+	        _this.onItemGroupChange = function (changedGroupValue, isChecked) {
+	            var groups = _this.state.groups.map(function (g) {
+	                if (g.value === changedGroupValue) {
+	                    g.active = isChecked;
+	                }
+
+	                return g;
+	            });
+
+	            var activeGroupVals = groups.filter(function (g) {
+	                return g.active;
+	            }).map(function (g) {
+	                return g.value;
+	            });
+	            var isPresentingArr = _this.state.items.filter(function (i) {
+	                return i.isPresenting;
+	            }).filter(function (i) {
+	                return activeGroupVals.indexOf(i.group) !== -1;
+	            });
+
+	            var modItems = _this.state.items;
+	            if (isPresentingArr.length === 0 && activeGroupVals.length > 0) {
+	                modItems = modItems.map(function (i) {
+	                    i.isPresenting = false;
+	                    return i;
+	                });
+
+	                modItems = _this.setRandomPresenter(modItems, groups);
+	            }
+
+	            _this.setState({ modItems: modItems, groups: groups });
+	        };
+
+	        _this.state = _this.initialGameState();
+	        return _this;
+	    }
+
+	    _createClass(VocabQuiz, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var modeOptions = [{ text: 'Japanese', value: 'first' }, { text: 'English', value: 'second' }];
+
+	            var activeGroupVals = this.state.groups.filter(function (g) {
+	                return g.active;
+	            }).map(function (g) {
+	                return g.value;
+	            });
+	            var items = this.state.items.filter(function (i) {
+	                return i.unanswered;
+	            }).filter(function (i) {
+	                return activeGroupVals.indexOf(i.group) !== -1;
+	            });
+
+	            if (items.length === 0 || activeGroupVals.length === 0) {
+	                return this.renderDone();
+	            }
+
+	            var presentingItemText = _lodash2.default.chain(items).filter(function (i) {
+	                return i.isPresenting;
+	            }).head().value().other;
+
+	            var itemsLeft = items.length;
+
+	            var previousError = void 0;
+	            if (this.state.previousError) {
+	                previousError = 'Wrong! ' + this.state.previousError.other + ' is ' + this.state.previousError.english + '.';
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                modeOptions.map(function (o) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { key: o.value },
+	                        _react2.default.createElement('input', { type: 'radio', value: o.value, checked: _this2.state.whichToTest === o.value, onChange: _this2.onModeChanged }),
+	                        _react2.default.createElement(
+	                            'label',
+	                            { htmlFor: o.value },
+	                            o.text
+	                        )
+	                    );
+	                }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'item-display-container' },
+	                    _react2.default.createElement(_ItemGroups2.default, { groups: this.state.groups, onChange: this.onItemGroupChange }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'vocab-quiz-item' },
+	                        presentingItemText
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'input-container' },
+	                    _react2.default.createElement('input', { type: 'text',
+	                        autoFocus: true,
+	                        onKeyPress: this.checkEnter }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'items-left' },
+	                        itemsLeft,
+	                        ' left'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'wrong-answer-text' },
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            previousError
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return VocabQuiz;
+	}(_react2.default.Component);
+
+	exports.default = VocabQuiz;
+
+/***/ },
+/* 193 */
+/***/ function(module, exports) {
+
+	module.exports = [
+		[
+			"おはようございます",
+			"good morning",
+			"ch6"
+		],
+		[
+			"こんいちは",
+			"good afternoon",
+			"ch6"
+		],
+		[
+			"こんばんは",
+			"good evening",
+			"ch6"
+		],
+		[
+			"おやすみなさい",
+			"goodnight",
+			"ch6"
+		],
+		[
+			"どうもありがとうございます",
+			"thank you very much",
+			"ch6"
+		],
+		[
+			"どういたしまして",
+			"you're welcome",
+			"ch6"
+		],
+		[
+			"はじめまして",
+			"nice to meet you (in beginning)",
+			"ch6"
+		],
+		[
+			"どうぞよろしく",
+			"nice to meet you (thanks in advance)",
+			"ch6"
+		],
+		[
+			"です",
+			"I'm",
+			"ch6"
+		],
+		[
+			"おじぎ",
+			"bow",
+			"ch6"
+		],
+		[
+			"おなまえ",
+			"(your) name",
+			"ch6"
+		],
+		[
+			"おなまえはなんですか。",
+			"what is your name?",
+			"ch6"
+		],
+		[
+			"おげんきですか。",
+			"how are you?",
+			"ch6"
+		],
+		[
+			"げんきです。",
+			"I'm well",
+			"ch6"
+		],
+		[
+			"はい",
+			"yes",
+			"ch6"
+		],
+		[
+			"いいえ",
+			"no",
+			"ch6"
+		],
+		[
+			"にほん",
+			"Japan",
+			"ch6"
+		],
+		[
+			"あめりか",
+			"America",
+			"ch6"
+		],
+		[
+			"かなだ",
+			"Canada",
+			"ch6"
+		],
+		[
+			"じん",
+			"a person from",
+			"ch6"
+		],
+		[
+			"にほんじん",
+			"Japanese person",
+			"ch6"
+		],
+		[
+			"あめりかじん",
+			"American person",
+			"ch6"
+		]
+	];
 
 /***/ }
 /******/ ]);
