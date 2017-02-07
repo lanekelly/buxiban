@@ -7,7 +7,7 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            games: ['hiragana', 'vocab'],
+            games: ['hiragana', 'katakana', 'vocab'],
             activeGame: 'hiragana'
         };
     }
@@ -32,7 +32,9 @@ export default class App extends React.Component {
     renderActiveGame = () => {
         switch (this.state.activeGame) {
             case 'hiragana':
-                return <AlphabetQuiz characterset="hiragana"/>
+                return <AlphabetQuiz characterset="hiragana" />
+            case 'katakana':
+                return <AlphabetQuiz characterset="katakana" />
             case 'vocab':
                 return <VocabQuiz />
         }

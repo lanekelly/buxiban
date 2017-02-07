@@ -1,5 +1,6 @@
 import React from 'react';
 import Hiragana from '../hiragana.json';
+import Katakana from '../katakana.json';
 import ItemGroups from './ItemGroups.jsx';
 import _ from 'lodash';
 import QuizItem from '../models/QuizItem.js';
@@ -13,15 +14,18 @@ export default class AlphabetQuiz extends React.Component {
     }
 
     getCharacterSet = (charSet) => {
-        if (charSet === 'hiragana') {
-            return Hiragana;
+        switch (charSet) {
+            case 'hiragana':
+                return Hiragana;
+            case 'katakana':
+                return Katakana;
         }
 
         throw 'Unsupported character set!';
     };
 
-    initialGameState = () => {
-        const charSetResource = this.getCharacterSet(this.props.characterset);
+    initialGameState = (characterSet) => {
+        const charSetResource = this.getCharacterSet(characterSet || this.props.characterset);
 
         let items = charSetResource.map(h => {
             return new QuizItem(h[0], h[1], h[2]);
@@ -39,6 +43,12 @@ export default class AlphabetQuiz extends React.Component {
             groups: groups
         };
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.characterset !== this.props.characterset) {
+            this.setState(this.initialGameState(nextProps.characterset));
+        }
+    }
 
     render() {
         const activeGroupVals = this.state.groups.filter(g => g.active).map(g => g.value);
@@ -58,7 +68,7 @@ export default class AlphabetQuiz extends React.Component {
         }
 
         return this.renderGame(this.state.groups, text, previousError, items.filter(h => h.unanswered).length);
-    };
+    }
 
     renderGame = (groups, text, previousError, left) => {
         return (
