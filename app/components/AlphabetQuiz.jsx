@@ -87,12 +87,6 @@ export default class AlphabetQuiz extends React.Component {
         );
     };
 
-    onGameChanged = (event) => {
-        this.setState({
-            activegame: event.target.value
-        });
-    };
-
     resetGame = () => {
         this.setState(this.initialGameState());
     };

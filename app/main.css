@@ -17,6 +17,11 @@ body {
     padding-left: 0.2em;
 }
 
+.vocab-quiz-item {
+    font-size: 3em;
+    padding-left: 1em;
+}
+
 .item-display-container {
     display: flex;
     flex-direction: row;
