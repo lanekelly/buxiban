@@ -84,7 +84,8 @@ export default class VocabQuiz extends React.Component {
                     <input className="answer-input" type="text"
                         autoFocus={true}
                         onKeyPress={this.checkEnter}
-                        autoCapitalize="none" />
+                        autoCapitalize="none" 
+                        autoCorrect="off"/>
                     <span className="items-left">{itemsLeft} left</span>
                     <div className="wrong-answer-text"><span>{previousError}</span></div>
                 </div>

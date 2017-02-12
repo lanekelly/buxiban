@@ -22058,7 +22058,8 @@
 	                    _react2.default.createElement('input', { className: 'answer-input', type: 'text',
 	                        autoFocus: true,
 	                        onKeyPress: _this.checkEnter,
-	                        autoCapitalize: 'none' }),
+	                        autoCapitalize: 'none',
+	                        autoCorrect: 'off' }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'items-left' },
@@ -40218,7 +40219,8 @@
 	                    _react2.default.createElement('input', { className: 'answer-input', type: 'text',
 	                        autoFocus: true,
 	                        onKeyPress: this.checkEnter,
-	                        autoCapitalize: 'none' }),
+	                        autoCapitalize: 'none',
+	                        autoCorrect: 'off' }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'items-left' },
