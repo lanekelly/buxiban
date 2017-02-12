@@ -73,7 +73,7 @@ export default class VocabQuiz extends React.Component {
             <div>
                 {modeOptions.map(o =>
                     <div key={o.value}>
-                        <input type="radio" value={o.value} checked={this.state.whichToTest === o.value} onChange={this.onModeChanged} />
+                        <input type="radio" id={o.value} value={o.value} checked={this.state.whichToTest === o.value} onChange={this.onModeChanged} />
                         <label htmlFor={o.value}>{o.text}</label>
                     </div>)}
                 <div className="item-display-container">
@@ -83,7 +83,8 @@ export default class VocabQuiz extends React.Component {
                 <div className="input-container">
                     <input type="text"
                         autoFocus={true}
-                        onKeyPress={this.checkEnter} />
+                        onKeyPress={this.checkEnter}
+                        autoCapitalize="none" />
                     <span className="items-left">{itemsLeft} left</span>
                     <div className="wrong-answer-text"><span>{previousError}</span></div>
                 </div>

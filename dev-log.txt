@@ -16,3 +16,7 @@ Desired improvements:
 Desired improvements:
 - Make input lowercase and check against that
 - Instead of defaulting to all groups enabled, pick one random at start.
+
+2/11
+- Trim whitespace before/after input
+- Make UX more responsive for mobile

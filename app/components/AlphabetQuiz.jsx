@@ -80,7 +80,8 @@ export default class AlphabetQuiz extends React.Component {
                 <div className="input-container">
                     <input type="text"
                         autoFocus={true}
-                        onKeyPress={this.checkEnter} />
+                        onKeyPress={this.checkEnter} 
+                        autoCapitalize="none" />
                     <span className="items-left">{left} left</span>
                     <div className="wrong-answer-text"><span>{previousError}</span></div>
                 </div>

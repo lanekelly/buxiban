@@ -18,7 +18,7 @@ export default class App extends React.Component {
                 <div>
                     {this.state.games.map(game =>
                         <div key={game}>
-                            <input type="radio" value={game} checked={this.state.activeGame === game} onChange={this.onGameChanged} />
+                            <input type="radio" id={game} value={game} checked={this.state.activeGame === game} onChange={this.onGameChanged} />
                             <label htmlFor={game}>{game}</label>
                         </div>)}
                 </div>
