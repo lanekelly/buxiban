@@ -100,7 +100,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\r\n    background: cornsilk;\r\n    font-family: sans-serif;\r\n}\r\n\r\n.app {\r\n    padding-top: 1em;\r\n    padding-left: 2em;\r\n}\r\n\r\n.game {\r\n    padding-top: 1em;\r\n}\r\n\r\n.quiz-item {\r\n    font-size: 7em;\r\n    padding-left: 0.2em;\r\n}\r\n\r\n.vocab-quiz-item {\r\n    font-size: 3em;\r\n    padding-left: 1em;\r\n}\r\n\r\n.item-display-container {\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\r\n}\r\n\r\n.items-left {\r\n    font-size: small;\r\n    padding-left: 1em;\r\n}\r\n\r\n.input-container {\r\n    padding-top: 1em;\r\n}\r\n\r\n.wrong-answer-text {\r\n    padding-top: 0.5em;\r\n}", ""]);
+	exports.push([module.id, "body {\n    background: cornsilk;\n    font-family: sans-serif;\n}\n\n.app {\n    padding-top: 1em;\n    padding-left: 2em;\n}\n\n.game {\n    padding-top: 1em;\n}\n\n.quiz-item {\n    font-size: 7em;\n    padding-left: 0.2em;\n}\n\n.vocab-quiz-item {\n    font-size: 3em;\n    padding-left: 1em;\n}\n\n.item-display-container {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n}\n\n.items-left {\n    font-size: small;\n    padding-left: 1em;\n}\n\n.input-container {\n    padding-top: 1em;\n}\n\n.wrong-answer-text {\n    padding-top: 0.5em;\n}", ""]);
 
 	// exports
 
@@ -21927,7 +21927,7 @@
 	                        return _react2.default.createElement(
 	                            'div',
 	                            { key: game },
-	                            _react2.default.createElement('input', { type: 'radio', value: game, checked: _this2.state.activeGame === game, onChange: _this2.onGameChanged }),
+	                            _react2.default.createElement('input', { type: 'radio', id: game, value: game, checked: _this2.state.activeGame === game, onChange: _this2.onGameChanged }),
 	                            _react2.default.createElement(
 	                                'label',
 	                                { htmlFor: game },
@@ -22057,7 +22057,8 @@
 	                    { className: 'input-container' },
 	                    _react2.default.createElement('input', { type: 'text',
 	                        autoFocus: true,
-	                        onKeyPress: _this.checkEnter }),
+	                        onKeyPress: _this.checkEnter,
+	                        autoCapitalize: 'none' }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'items-left' },
@@ -40193,7 +40194,7 @@
 	                    return _react2.default.createElement(
 	                        'div',
 	                        { key: o.value },
-	                        _react2.default.createElement('input', { type: 'radio', value: o.value, checked: _this2.state.whichToTest === o.value, onChange: _this2.onModeChanged }),
+	                        _react2.default.createElement('input', { type: 'radio', id: o.value, value: o.value, checked: _this2.state.whichToTest === o.value, onChange: _this2.onModeChanged }),
 	                        _react2.default.createElement(
 	                            'label',
 	                            { htmlFor: o.value },
@@ -40216,7 +40217,8 @@
 	                    { className: 'input-container' },
 	                    _react2.default.createElement('input', { type: 'text',
 	                        autoFocus: true,
-	                        onKeyPress: this.checkEnter }),
+	                        onKeyPress: this.checkEnter,
+	                        autoCapitalize: 'none' }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'items-left' },
