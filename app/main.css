@@ -29,7 +29,6 @@ body {
 }
 
 .items-left {
-    font-size: small;
     padding-left: 1em;
 }
 
@@ -39,4 +38,8 @@ body {
 
 .wrong-answer-text {
     padding-top: 0.5em;
+}
+
+.answer-input {
+    font-size: 1.3em;
 }

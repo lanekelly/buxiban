@@ -100,7 +100,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\n    background: cornsilk;\n    font-family: sans-serif;\n}\n\n.app {\n    padding-top: 1em;\n    padding-left: 2em;\n}\n\n.game {\n    padding-top: 1em;\n}\n\n.quiz-item {\n    font-size: 7em;\n    padding-left: 0.2em;\n}\n\n.vocab-quiz-item {\n    font-size: 3em;\n    padding-left: 1em;\n}\n\n.item-display-container {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n}\n\n.items-left {\n    font-size: small;\n    padding-left: 1em;\n}\n\n.input-container {\n    padding-top: 1em;\n}\n\n.wrong-answer-text {\n    padding-top: 0.5em;\n}", ""]);
+	exports.push([module.id, "body {\n    background: cornsilk;\n    font-family: sans-serif;\n}\n\n.app {\n    padding-top: 1em;\n    padding-left: 2em;\n}\n\n.game {\n    padding-top: 1em;\n}\n\n.quiz-item {\n    font-size: 7em;\n    padding-left: 0.2em;\n}\n\n.vocab-quiz-item {\n    font-size: 3em;\n    padding-left: 1em;\n}\n\n.item-display-container {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n}\n\n.items-left {\n    padding-left: 1em;\n}\n\n.input-container {\n    padding-top: 1em;\n}\n\n.wrong-answer-text {\n    padding-top: 0.5em;\n}\n\n.answer-input {\n    font-size: 1.3em;\n}", ""]);
 
 	// exports
 
@@ -22055,7 +22055,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'input-container' },
-	                    _react2.default.createElement('input', { type: 'text',
+	                    _react2.default.createElement('input', { className: 'answer-input', type: 'text',
 	                        autoFocus: true,
 	                        onKeyPress: _this.checkEnter,
 	                        autoCapitalize: 'none' }),
@@ -40215,7 +40215,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'input-container' },
-	                    _react2.default.createElement('input', { type: 'text',
+	                    _react2.default.createElement('input', { className: 'answer-input', type: 'text',
 	                        autoFocus: true,
 	                        onKeyPress: this.checkEnter,
 	                        autoCapitalize: 'none' }),

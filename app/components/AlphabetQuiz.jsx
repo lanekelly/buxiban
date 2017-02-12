@@ -78,7 +78,7 @@ export default class AlphabetQuiz extends React.Component {
                     <span className="quiz-item">{text}</span>
                 </div>
                 <div className="input-container">
-                    <input type="text"
+                    <input className="answer-input" type="text"
                         autoFocus={true}
                         onKeyPress={this.checkEnter} 
                         autoCapitalize="none" />

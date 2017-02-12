@@ -81,7 +81,7 @@ export default class VocabQuiz extends React.Component {
                     <span className="vocab-quiz-item">{presentingItemText}</span>
                 </div>
                 <div className="input-container">
-                    <input type="text"
+                    <input className="answer-input" type="text"
                         autoFocus={true}
                         onKeyPress={this.checkEnter}
                         autoCapitalize="none" />
