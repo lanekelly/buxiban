@@ -72,7 +72,7 @@ export default class VocabQuiz extends React.Component {
         return (
             <div>
                 {modeOptions.map(o =>
-                    <div key={o.value}>
+                    <div className="modeOptionRow" key={o.value}>
                         <input type="radio" id={o.value} value={o.value} checked={this.state.whichToTest === o.value} onChange={this.onModeChanged} />
                         <label htmlFor={o.value}>{o.text}</label>
                     </div>)}

@@ -8,7 +8,7 @@ export default class ItemGroup extends React.Component {
     render() {
         let g = this.props.group;
         return (
-            <div> 
+            <div className="groupOptionRow"> 
                 <input type="checkbox" id={g.value} value={g.value} checked={g.active} onChange={this.onChange}/>
                 <label htmlFor={g.value}>{g.value}</label>
             </div>

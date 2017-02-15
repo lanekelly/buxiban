@@ -43,3 +43,35 @@ body {
 .answer-input {
     font-size: 1.3em;
 }
+
+@media only screen and (max-width : 768px) {
+
+    .app {
+        padding-top: 0em;
+        padding-left: 0em;
+    }
+
+    .gameOptionRow, .groupOptionRow, .modeOptionRow {
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+
+    .gameOptionRow > label {
+        padding-left: 1em;
+    }
+
+    .groupOptionRow {
+        border-top: 1px solid gray;
+    }
+
+    .groupOptionRow > label {        
+        display: inline-block;
+        width: 90%;
+        padding-left: 1em;
+    }
+
+    .item-display-container {
+        display: block;
+    }
+
+}
