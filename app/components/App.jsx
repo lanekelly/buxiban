@@ -1,14 +1,14 @@
 import React from 'react';
-import AlphabetQuiz from './AlphabetQuiz';
-import VocabQuiz from './VocabQuiz';
+import Chinese from './Chinese';
+import Japanese from './Japanese';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            games: ['hiragana', 'katakana', 'vocab'],
-            activeGame: 'hiragana'
+            languages: ['Chinese', 'Japanese'],
+            activeLanguage: 'Chinese'
         };
     }
 
@@ -16,33 +16,31 @@ export default class App extends React.Component {
         return (
             <div className="app">
                 <div>
-                    {this.state.games.map(game =>
-                        <div key={game}>
-                            <input type="radio" id={game} value={game} checked={this.state.activeGame === game} onChange={this.onGameChanged} />
-                            <label htmlFor={game}>{game}</label>
+                    {this.state.languages.map(language =>
+                        <div key={language}>
+                            <input type="radio" id={language} value={language} checked={this.state.activeLanguage === language} onChange={this.onLanguageChanged} />
+                            <label htmlFor={language}>{language}</label>
                         </div>)}
                 </div>
-                <div className="game">
-                    {this.renderActiveGame()}
+                <div className="language-games">
+                    {this.renderActiveLanguage()}
                 </div>
             </div>
         );
     }
 
-    renderActiveGame = () => {
-        switch (this.state.activeGame) {
-            case 'hiragana':
-                return <AlphabetQuiz characterset="hiragana" />
-            case 'katakana':
-                return <AlphabetQuiz characterset="katakana" />
-            case 'vocab':
-                return <VocabQuiz />
+    renderActiveLanguage = () => {
+        switch (this.state.activeLanguage) {
+            case 'Chinese':
+                return <Chinese />
+            case 'Japanese':
+                return <Japanese />
         }
     };
 
-    onGameChanged = (event) => {
+    onLanguageChanged = (event) => {
         this.setState({
-            activeGame: event.target.value
+            activeLanguage: event.target.value
         });
     };
 }
