@@ -1,7 +1,8 @@
 import React from 'react';
 import QuizItem from '../models/QuizItem.js';
 import QuizItemGroup from '../models/QuizItemGroup.js';
-import Vocabulary from "../vocabulary.json";
+import JapaneseVocabulary from "../japanese-vocabulary.json";
+import ChineseVocabulary from "../chinese-vocabulary.json";
 import _ from 'lodash';
 import ItemGroups from './ItemGroups';
 
@@ -12,11 +13,13 @@ export default class VocabQuiz extends React.Component {
         this.state = this.initialGameState();
     }
 
-    initialGameState = (whichToTest) => {
+    initialGameState = (whichToTest, wordSet) => {
+        const wordSetResource = this.getWordSet(wordSet || this.props.wordset);
+        const modes = this.getModes(wordSet || this.props.wordset);
         const whichToTestVal = whichToTest || 'first';
 
-        let items = this.getQuizItems(whichToTestVal);
-        const groups = _.uniqBy(Vocabulary.map(w => {
+        let items = this.getQuizItems(wordSetResource, whichToTestVal);
+        const groups = _.uniqBy(wordSetResource.map(w => {
             return new QuizItemGroup(w[2])
         }), 'value');
 
@@ -24,13 +27,44 @@ export default class VocabQuiz extends React.Component {
 
         return {
             items: items,
+            modes: modes,
             previousError: null,
             groups: groups,
             whichToTest: whichToTestVal
         };
     };
 
-    getQuizItems = (whichToTest) => {
+    getWordSet = (wordSet) => {
+        switch (wordSet) {
+            case 'chinese':
+                return ChineseVocabulary;
+            case 'japanese':
+                return JapaneseVocabulary;
+        }
+
+        throw 'Unsupported vocabulary set!';
+    };
+
+    getModes = (wordSet) => {
+        var language;
+
+        switch (wordSet) {
+            case 'chinese':
+                language = 'Chinese';
+                break;
+            case 'japanese':
+                language = 'Japanese';
+                break;
+        }
+
+        if (!language) {
+            throw 'Unsupported vocabulary set!';
+        }
+
+        return [{ text: language, value: 'first' }, { text: 'English', value: 'second' }];
+    };
+
+    getQuizItems = (wordSet, whichToTest) => {
         if (whichToTest !== 'first' && whichToTest !== 'second') {
             throw 'Invalid paramter. Must be \'first\' or \'second\'';
         }
@@ -38,14 +72,18 @@ export default class VocabQuiz extends React.Component {
         const testItemIndex = whichToTest === 'first' ? 0 : 1;
         const answerIndex = whichToTest === 'first' ? 1 : 0;
 
-        return Vocabulary.map(w => {
+        return wordSet.map(w => {
             return new QuizItem(w[testItemIndex], w[answerIndex], w[2])
         });
     }
 
-    render() {
-        const modeOptions = [{ text: 'Japanese', value: 'first' }, { text: 'English', value: 'second' }];
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.wordset !== this.props.wordset) {
+            this.setState(this.initialGameState(nextProps.wordset));
+        }
+    }
 
+    render() {
         const activeGroupVals = this.state.groups.filter(g => g.active).map(g => g.value);
         const items = this.state.items
             .filter(i => i.unanswered)
@@ -71,7 +109,7 @@ export default class VocabQuiz extends React.Component {
 
         return (
             <div>
-                {modeOptions.map(o =>
+                {this.state.modes.map(o =>
                     <div key={o.value}>
                         <input type="radio" id={o.value} value={o.value} checked={this.state.whichToTest === o.value} onChange={this.onModeChanged} />
                         <label htmlFor={o.value}>{o.text}</label>
@@ -84,7 +122,7 @@ export default class VocabQuiz extends React.Component {
                     <input className="answer-input" type="text"
                         autoFocus={true}
                         onKeyPress={this.checkEnter}
-                        autoCapitalize="none" 
+                        autoCapitalize="none"
                         autoCorrect="off"/>
                     <span className="items-left">{itemsLeft} left</span>
                     <div className="wrong-answer-text"><span>{previousError}</span></div>

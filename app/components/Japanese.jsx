@@ -36,7 +36,7 @@ export default class Japanese extends React.Component {
             case 'katakana':
                 return <AlphabetQuiz characterset="katakana" />
             case 'vocab':
-                return <VocabQuiz />
+                return <VocabQuiz wordset="japanese"/>
         }
     };
 
