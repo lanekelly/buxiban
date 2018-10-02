@@ -23,4 +23,9 @@ Desired improvements:
 
 2/13
 - When wrong, show incorrect input next to correct answer, which is useful when entering Japanese characters
-- Make more usable on mobile. Checkboxes and radios should be full-width rows. 
+- Make more usable on mobile. Checkboxes and radios should be full-width rows.
+
+9/30/2018
+Idea: when I get close to the right answer but not exact (which happens all the time), there should be a
+button for "Was your answer close enough?" that saves the answer and considers it a candidate for next time.
+Definitely will complicate things to implement this though.
